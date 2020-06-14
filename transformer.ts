@@ -1,4 +1,5 @@
 import * as ts from 'typescript';
+import * as fs from 'fs';
 import * as path from 'path';
 
 export default function transformer(program: ts.Program): ts.TransformerFactory<ts.SourceFile> {
@@ -58,7 +59,7 @@ function isKeysCallExpression(node: ts.Node, typeChecker: ts.TypeChecker): node 
   const { declaration } = signature;
   return !!declaration
     && !ts.isJSDocSignature(declaration)
-    && (path.join(declaration.getSourceFile().fileName) === indexTs)
+    && (fs.realpathSync(path.join(declaration.getSourceFile().fileName)) === indexTs)
     && !!declaration.name
     && declaration.name.getText() === 'keys';
 }
